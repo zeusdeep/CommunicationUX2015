@@ -1,6 +1,19 @@
 import pygame
 import os
 import time
+import socket
+
+def send_data(msg):
+	msg = msg + "\n"
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sock.connect(("128.205.54.5", 9999))
+	totalsent = 0
+	while totalsent < len(msg):
+		sent = sock.send(msg[totalsent:])
+		if sent == 0:
+			raise RuntimeError("socket connection broken")
+		totalsent = totalsent + sent
+
 
 elbowPosition = 1.001
 shoulderPosition = 1.001
@@ -42,7 +55,7 @@ while done==False:
     joystick = pygame.joystick.Joystick(0)
     joystick.init()
         
-    joystick2 = pygame.joystick.Joystick(0)
+    joystick2 = pygame.joystick.Joystick(1)
     joystick2.init()
     
     joy1_left = joystick.get_axis( 1 )
@@ -125,8 +138,10 @@ while done==False:
     rightMotorSend = ((rightMotor) * 500) + 1500
     leftMotorSend = ((leftMotor) * 500) + 1500
         
-    command = "l" + str(int(round(elbowSend))) + "," + str(int(round(shoulderSend))) + "," + str(int(round(baseSend))) + "," + str(int(round(manipulatorSend))) + "," + str(int(round(clawState))) + "," + str(int(round(rightMotorSend))) + "," + str(int(round(leftMotorSend))) + ",";
+    command = "l" + str(int(round(shoulderSend))) + "," + str(int(round(elbowSend))) + "," + str(int(round(baseSend))) + "," + str(int(round(manipulatorSend))) + "," + str(int(round(clawState))) + "," + str(int(round(rightMotorSend))) + "," + str(int(round(leftMotorSend))) + ",";
    
+    send_data(command)	
+
     print command
     command = ""
     # Limit to 16 frames per second

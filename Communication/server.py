@@ -12,7 +12,7 @@ class server:
 		self.connections = []
 		self.port = port
 		#TODO check ip
-		hostname = "127.0.0.1"
+		hostname = "128.205.54.9"
 		self.serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		#self.serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR)
 		self.serv.bind((hostname, int(port)))
@@ -30,11 +30,11 @@ class server:
 					self.addr = address
 					self.receive()
 				elif sock == sys.stdin:
-					# TODO check this
-					port = 9998
+					# TODO check port
+					port = 9999
 					sstr = sys.stdin.readline()
 					msg = sstr
-					self.send(msg, "127.0.0.1", port)
+					self.send(msg, "128.205.54.5", port)
 				else:
 					self.receive()
 
