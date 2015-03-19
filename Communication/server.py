@@ -3,7 +3,6 @@ import select
 import os
 import sys
 import client
-import sockmessage
 
 class server:
 
@@ -32,9 +31,9 @@ class server:
 					self.receive()
 				elif sock == sys.stdin:
 					# TODO check this
-					port = 9998 if self.port == '9999' else 9999
+					port = 9998
 					sstr = sys.stdin.readline()
-					msg = sockmessage.sockmessage(self.messageNum+1, sstr)
+					msg = sstr
 					self.send(msg, "127.0.0.1", port)
 				else:
 					self.receive()
@@ -45,10 +44,7 @@ class server:
 		self.client.send(data)
 
 	def receive(self):
-		# TODO recieved data to be published or displayed
-		msg =  self.client.receive()
-		self.messageNum = msg.num
-		print str(msg.num) + ":" + msg.sstr
+		print self.client.receive()
 		sys.stdout.flush()
 
 	def ping(self, hostname):
