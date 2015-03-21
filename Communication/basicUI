@@ -1,0 +1,122 @@
+"""
+Implemented a basic layout structure using grid layout.
+
+Currently, the program is able to switch images based on the combo box item selected. 
+To incorporate the logic for switching camera feeds based on combo box, the program logic should be included in onComboSelected method.
+
+Currently, the program just displays an alert box when reset button is clicked. 
+The code for reset needs to be included in handleButton method.
+"""
+
+import sys
+from PyQt4 import QtGui
+
+
+class Example(QtGui.QWidget):
+    
+    def __init__(self):
+        super(Example, self).__init__()
+        
+        self.initUI()
+        
+    def initUI(self):
+
+        #Labels for Camera
+
+        cameraLabel0=QtGui.QLabel('Camera 0')
+        cameraLabel1=QtGui.QLabel('Camera 1')
+        cameraLabel2=QtGui.QLabel('Camera 2')
+        cameraLabel3=QtGui.QLabel('Camera 3')
+        cameraLabel4=QtGui.QLabel('Camera 4')
+
+        #TextEdits for Camera defination
+
+        cameraText0 = QtGui.QLineEdit()
+        cameraText1 = QtGui.QLineEdit()
+        cameraText2 = QtGui.QLineEdit()
+        cameraText3 = QtGui.QLineEdit()
+        cameraText4 = QtGui.QLineEdit()
+
+        #Camera Stream Holder
+
+        #dummyLabel=QtGui.QPixmap("camera0.JPG")
+        self.cameraFeed = QtGui.QLabel()
+        self.cameraFeed.setPixmap(QtGui.QPixmap("camera0.JPG"))
+
+
+        #ComboBox for selecting camera
+
+        comboCameraSelect = QtGui.QComboBox(self)
+        comboCameraSelect.addItem("camera0")
+        comboCameraSelect.addItem("camera1")
+        comboCameraSelect.addItem("camera2")
+        comboCameraSelect.addItem("camera3")
+        comboCameraSelect.addItem("camera4")
+
+        comboCameraSelect.activated[str].connect(self.onComboSelected)
+
+
+
+
+        #Reset Button
+
+        self.resetButton = QtGui.QPushButton('Reset', self)
+        self.resetButton.clicked.connect(self.handleButton)
+
+
+
+        #for displaying the status
+
+        displayStatus = QtGui.QLabel('Status')
+        grid = QtGui.QGridLayout()
+        grid.setSpacing(10)
+
+        grid.addWidget(self.cameraFeed,1,0,5,1)
+        grid.addWidget(cameraLabel0,1,6,1,1)
+        grid.addWidget(cameraText0,1, 7,1,1)
+
+        grid.addWidget(cameraLabel1,2,6,1,1)
+        grid.addWidget(cameraText1,2, 7,1,1)
+
+        grid.addWidget(cameraLabel2,3,6,1,1)
+        grid.addWidget(cameraText2,3, 7,1,1)
+
+        grid.addWidget(cameraLabel3,4,6,1,1)
+        grid.addWidget(cameraText3,4, 7,1,1)
+
+        grid.addWidget(cameraLabel4,5,6,1,1)
+        grid.addWidget(cameraText4,5, 7,1,1)
+
+        grid.addWidget(self.resetButton,6,0)
+        grid.addWidget(displayStatus,6,1,3,3)
+        grid.addWidget(comboCameraSelect,7,0,2,1)
+        self.setLayout(grid) 
+        
+        self.setGeometry(100, 100,300,300)
+        self.setWindowTitle('UB_Bulls')    
+        self.show()
+
+
+
+    # Method for switching Camera Feeds
+    def onComboSelected(self, text):
+        self.cameraFeed.setPixmap(QtGui.QPixmap(text+".JPG"))
+
+
+
+    # Method for handling Reset Button Event
+    def handleButton(self):
+        QtGui.QMessageBox.question(self, 'Message',
+            "Reset Button Clicked", QtGui.QMessageBox.Yes | 
+            QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+         
+        
+def main():
+    
+    app = QtGui.QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
